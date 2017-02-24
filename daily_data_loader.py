@@ -26,6 +26,10 @@ if __name__ == '__main__':
     parser = ArgumentParser()
     parser.add_argument('-i', '--input_file', type=str,
                         help='Determines a single daily zip file')
+    parser.add_argument('-x', '--expiration_date', type=str, required=True,
+                        help='Determines the expiration date under study. Example: 2017-03-17')
+    parser.add_argument('-k', '--strike', type=float,
+                        help='Determines the strike of the option under study. Example: 6000')
     args = parser.parse_args()
     
     data = pd.DataFrame()
@@ -80,7 +84,12 @@ if __name__ == '__main__':
     del data['contract_subgroup']
     del data['contract_type']
     
-    # Filter out options without open interest
-    #data = data[data.open_interest > 0]
-    print(data[data.expiration_date == '2017-03-17'])
-    oip.plot_open_interest(data[data.expiration_date == '2017-03-17'])
+    if args.input_file and args.expiration_date:
+        print(data[data.expiration_date == args.expiration_date])
+        oip.plot_open_interest(data, args.expiration_date)
+        
+        #oip.normal_dist_over_call_open_interest(data[(data.expiration_date == args.expiration_date) & (data.right == 'C')])
+    
+    if args.strike and args.expiration_date and not args.input_file:
+        # If a certain option has been given with both strike and expiration, plot cummulative open interest
+        oip.plot_open_interest_evolution(data, args.strike, args.expiration_date)

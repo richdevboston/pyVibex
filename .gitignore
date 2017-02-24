@@ -95,6 +95,10 @@ ENV/
 # Rope project settings
 .ropeproject
 
+# Input meff files
+meff_daily_data/
+meff_historical_data/
+
 # Output files
 *.csv
 *.txt

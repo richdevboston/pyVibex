@@ -19,7 +19,7 @@ def plot_open_interest(df: pd.DataFrame, t: datetime):
     # Filter out for given expiration date
     df = df[df.expiration_date == t]
     
-    # Filter out strikes too OTM TODO, this has to be improved
+    # Filter out strikes too OTM
     max_oi = int(df.open_interest.max())
     df.loc[df.open_interest < 0.1 * max_oi, 'open_interest'] = 0
     
